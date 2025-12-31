@@ -1,4 +1,14 @@
-const API_BASE_URL = 'http://localhost:8080/api';
+// Detectar URL da API automaticamente
+const getApiBaseUrl = () => {
+    // Se estiver em produção (Railway, Render, etc), usar a URL atual
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        return `${window.location.protocol}//${window.location.host}/api`;
+    }
+    // Desenvolvimento local
+    return 'http://localhost:8080/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 let categoryChart, timeSeriesChart, topMetricsChart, categoryTotalsChart;
 let authToken = localStorage.getItem('authToken');
