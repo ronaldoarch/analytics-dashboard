@@ -257,24 +257,62 @@ brew install maven
 
 ## 🚀 Deploy
 
-### Heroku
+### ⚠️ Importante sobre Vercel
+**Vercel não suporta aplicações Spring Boot** (requer servidor Java). Use uma das opções abaixo:
+
+### Railway (Recomendado - Mais Fácil) 🚂
+1. Acesse [railway.app](https://railway.app) e faça login com GitHub
+2. Clique em "New Project" → "Deploy from GitHub repo"
+3. Selecione o repositório `analytics-dashboard`
+4. Railway detectará automaticamente o projeto Java
+5. Adicione PostgreSQL como serviço
+6. Configure variáveis de ambiente:
+   - `SPRING_PROFILES_ACTIVE=prod`
+   - `SPRING_DATASOURCE_URL` (será preenchido automaticamente pelo PostgreSQL)
+7. Deploy automático! 🎉
+
+### Render (Gratuito) 🎨
+1. Acesse [render.com](https://render.com) e faça login com GitHub
+2. Clique em "New" → "Web Service"
+3. Conecte o repositório `analytics-dashboard`
+4. Configurações:
+   - **Build Command:** `./mvnw clean package -DskipTests`
+   - **Start Command:** `java -jar target/*.jar`
+   - **Environment:** `Java`
+5. Adicione PostgreSQL Database
+6. Configure variáveis de ambiente (Render preenche automaticamente)
+7. Deploy! 🚀
+
+### Fly.io (Gratuito) ✈️
 ```bash
-heroku create seu-app-name
-git push heroku main
+# Instalar flyctl
+curl -L https://fly.io/install.sh | sh
+
+# Login
+fly auth login
+
+# Deploy
+fly launch
+fly deploy
 ```
 
-### Docker
+### Docker (Local ou VPS)
 ```bash
+# Build
 docker build -t analytics-dashboard .
-docker run -p 8080:8080 analytics-dashboard
+
+# Run com PostgreSQL
+docker-compose up -d
 ```
 
 ### Variáveis de Ambiente para Produção
 ```bash
-SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/analyticsdb
+SPRING_PROFILES_ACTIVE=prod
+SPRING_DATASOURCE_URL=jdbc:postgresql://host:5432/analyticsdb
 SPRING_DATASOURCE_USERNAME=postgres
-SPRING_DATASOURCE_PASSWORD=senha
-JWT_SECRET=sua-chave-secreta-aqui
+SPRING_DATASOURCE_PASSWORD=sua-senha
+JWT_SECRET=sua-chave-secreta-aqui-com-pelo-menos-32-caracteres
+PORT=8080
 ```
 
 ## 📝 Licença

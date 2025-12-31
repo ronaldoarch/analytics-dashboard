@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: analytics-dashboard
+    env: java
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/*.jar
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: analytics-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: analytics-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: analytics-db
+          property: password
+
+databases:
+  - name: analytics-db
+    plan: free
+    databaseName: analyticsdb
+    user: postgres
+
