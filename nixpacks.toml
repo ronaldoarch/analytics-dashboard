@@ -1,12 +1,13 @@
 [phases.setup]
 nixPkgs = ["jdk17", "maven"]
 
-[phases.install]
+[phases.build]
 cmds = [
   "chmod +x ./mvnw || true",
-  "./mvnw clean package -DskipTests || mvn clean package -DskipTests"
+  "./mvnw clean package -DskipTests || mvn clean package -DskipTests",
+  "ls -la target/*.jar || echo 'No JAR found in target/'"
 ]
 
 [start]
-cmd = "sh -c 'JAR_FILE=$(find target -name \"*.jar\" -not -name \"*-sources.jar\" -not -name \"*-javadoc.jar\" | head -1) && java -jar \"$JAR_FILE\"'"
+cmd = "sh -c 'if [ -f target/analytics-dashboard.jar ]; then java -jar target/analytics-dashboard.jar; elif [ -f target/analytics-dashboard-1.0.0.jar ]; then java -jar target/analytics-dashboard-1.0.0.jar; else JAR_FILE=$(find target -name \"*.jar\" -not -name \"*-sources.jar\" -not -name \"*-javadoc.jar\" | head -1); if [ -z \"$JAR_FILE\" ]; then echo \"ERROR: No JAR file found in target/\"; ls -la target/; exit 1; else java -jar \"$JAR_FILE\"; fi; fi'"
 
