@@ -1,10 +1,10 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "builder": "NIXPACKS"
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "Dockerfile"
   },
   "deploy": {
-    "startCommand": "sh -c 'JAR_FILE=$(find target -name \"*.jar\" -not -name \"*-sources.jar\" -not -name \"*-javadoc.jar\" | head -1) && java -jar \"$JAR_FILE\"'",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }
